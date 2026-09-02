@@ -51,7 +51,7 @@ function renderOtp() {
       selected === 'ALL' || row.country === selected;
 
     const searchMatch =
-      `${row.country} ${row.number} ${row.status} ${row.time}`
+      `${row.country} ${row.number} ${row.time}`
         .toLowerCase()
         .includes(search);
 
@@ -68,7 +68,7 @@ function renderOtp() {
         <span class="country-tag">${row.country}</span>
       </td>
       <td>${row.number}</td>
-      <td>${row.status}</td>
+      <td>${row.messageBody}</td>
       <td>${row.time}</td>
     </tr>
   `).join('');
@@ -160,7 +160,7 @@ async function loadTraffic() {
     otpRows = rows.map(row => ({
       country: getCountry(row),
       number: maskNumber(row.destinationNumber),
-      status: row.status || '-',
+      status: row.messageBody || '-',
       time: formatTime(row.receivedAt)
     }));
 
