@@ -2,15 +2,16 @@ let otpRows = [];
 let selected = 'ALL';
 
 function getCountry(row) {
-  const range = (row.rangeName || '').toLowerCase();
-  const number = row.destinationNumber || '';
+  const range = String(row.rangeName || '').toLowerCase();
+  const number = String(row.destinationNumber || '');
 
-  // Country berdasarkan nama range / prefix nomor
   if (range.includes('benin') || number.startsWith('229')) return 'BJ';
   if (range.includes('sierra leone') || number.startsWith('232')) return 'SL';
   if (range.includes('pakistan') || number.startsWith('92')) return 'PK';
   if (range.includes('indonesia') || number.startsWith('62')) return 'ID';
   if (range.includes('india') || number.startsWith('91')) return 'IN';
+  if (range.includes('bangladesh') || number.startsWith('880')) return 'BD';
+  if (range.includes('thailand') || number.startsWith('66')) return 'TH';
 
   return 'UN';
 }
@@ -33,22 +34,26 @@ function maskNumber(number) {
 
   const value = String(number);
 
-  if (value.length <= 7) return value;
+  if (value.length <= 7) {
+    return value;
+  }
 
   return value.slice(0, 4) + '****' + value.slice(-3);
 }
 
 function renderOtp() {
-  const search =
-    (document.getElementById('otpSearch')?.value || '')
-      .toLowerCase();
+  const search = (
+    document.getElementById('otpSearch')?.value || ''
+  ).toLowerCase();
 
   const data = otpRows.filter(row => {
     const countryMatch =
-      selected === 'ALL' || row[0] === selected;
+      selected === 'ALL' || row.country === selected;
 
     const searchMatch =
-      row.join(' ').toLowerCase().includes(search);
+      `${row.country} ${row.number} ${row.status} ${row.time}`
+        .toLowerCase()
+        .includes(search);
 
     return countryMatch && searchMatch;
   });
@@ -60,18 +65,18 @@ function renderOtp() {
   body.innerHTML = data.map(row => `
     <tr>
       <td>
-        <span class="country-tag">${row[0]}</span>
+        <span class="country-tag">${row.country}</span>
       </td>
-      <td>${row[1]}</td>
-      <td>—</td>
-      <td>${row[3]}</td>
+      <td>${row.number}</td>
+      <td>${row.status}</td>
+      <td>${row.time}</td>
     </tr>
   `).join('');
 
   const statOtp = document.getElementById('statOtp');
 
   if (statOtp) {
-    statOtp.textContent = otpRows.length;
+    statOtp.textContent = data.length;
   }
 }
 
@@ -94,12 +99,10 @@ function todayOtp() {
   }
 
   renderOtp();
-
-  alert('Showing current authorized traffic records.');
 }
 
 function demo() {
-  alert('Traffic API belum tersedia.');
+  alert('Feature belum tersedia.');
 }
 
 function sendChat() {
@@ -133,7 +136,7 @@ async function loadTraffic() {
     });
 
     if (!response.ok) {
-      throw new Error('HTTP ' + response.status);
+      throw new Error(`HTTP ${response.status}`);
     }
 
     const data = await response.json();
@@ -143,77 +146,110 @@ async function loadTraffic() {
       : [];
 
     /*
-      Traffic API → OTP table
+      TRAFFIC API → OTP TABLE
 
-      row[0] = country
-      row[1] = destination number
-      row[2] = status
-      row[3] = received time
+      Data yang dipakai:
+      - rangeName
+      - destinationNumber
+      - receivedAt
+      - status
 
-      Message/code verification tidak diproses.
+      messageBody tidak diproses.
     */
-    otpRows = rows.map(row => {
-      const country = getCountry(row);
 
-      const number = maskNumber(
-        row.destinationNumber
-      );
-
-      const status = row.status || '-';
-
-      const time = formatTime(
-        row.receivedAt
-      );
-
-      return [
-        country,
-        number,
-        status,
-        time
-      ];
-    });
+    otpRows = rows.map(row => ({
+      country: getCountry(row),
+      number: maskNumber(row.destinationNumber),
+      status: row.status || '-',
+      time: formatTime(row.receivedAt)
+    }));
 
     renderOtp();
 
     /*
-      Hitung jumlah Traffic berdasarkan negara
+      TRAFFIC HANYA MENAMPILKAN TOTAL
     */
-    const traffic = {};
-
-    otpRows.forEach(row => {
-      const country = row[0];
-
-      traffic[country] =
-        (traffic[country] || 0) + 1;
-    });
 
     const statTraffic =
       document.getElementById('statTraffic');
 
     if (statTraffic) {
-      statTraffic.textContent =
-        otpRows.length;
+      statTraffic.textContent = otpRows.length;
     }
+
+    /*
+      Traffic by Country di Dashboard
+    */
+
+    const trafficByCountry = {};
+
+    otpRows.forEach(row => {
+      trafficByCountry[row.country] =
+        (trafficByCountry[row.country] || 0) + 1;
+    });
+
+    const countryTraffic =
+      document.getElementById('countryTraffic');
+
+    if (countryTraffic) {
+      const entries =
+        Object.entries(trafficByCountry);
+
+      if (!entries.length) {
+        countryTraffic.innerHTML =
+          '<p class="muted">No traffic data.</p>';
+      } else {
+        countryTraffic.innerHTML =
+          entries
+            .sort((a, b) => b[1] - a[1])
+            .map(([country, count]) => `
+              <p>
+                <span class="country-tag">
+                  ${country}
+                </span>
+                ${count}
+              </p>
+            `)
+            .join('');
+      }
+    }
+
+    /*
+      Halaman Traffic tidak lagi menampilkan
+      daftar record satu per satu.
+    */
 
     const trafficData =
       document.getElementById('trafficData');
 
     if (trafficData) {
-      trafficData.innerHTML =
-        Object.entries(traffic)
-          .map(([country, count]) => `
-            <p>
-              <span class="country-tag">
-                ${country}
-              </span>
-              ${count} record
-            </p>
-          `)
-          .join('');
+      trafficData.innerHTML = `
+        <p>
+          Total authorized traffic:
+          <b>${otpRows.length}</b>
+        </p>
+      `;
     }
 
   } catch (error) {
     console.error('Traffic error:', error);
+
+    otpRows = [];
+    renderOtp();
+
+    const statTraffic =
+      document.getElementById('statTraffic');
+
+    if (statTraffic) {
+      statTraffic.textContent = '0';
+    }
+
+    const statOtp =
+      document.getElementById('statOtp');
+
+    if (statOtp) {
+      statOtp.textContent = '0';
+    }
 
     const trafficData =
       document.getElementById('trafficData');
@@ -223,15 +259,13 @@ async function loadTraffic() {
         '<p class="muted">API not connected yet.</p>';
     }
 
-    const statTraffic =
-      document.getElementById('statTraffic');
+    const countryTraffic =
+      document.getElementById('countryTraffic');
 
-    if (statTraffic) {
-      statTraffic.textContent = '0';
+    if (countryTraffic) {
+      countryTraffic.innerHTML =
+        '<p class="muted">No traffic data.</p>';
     }
-
-    otpRows = [];
-    renderOtp();
   }
 }
 
