@@ -102,7 +102,7 @@ async function sendTelegram(row) {
     formatDateTime(row.receivedAt);
 
   const message = [
-    `🔔 <b>${escapeTelegram(country)} • ${escapeTelegram(sender)}</b>`,
+    `🔔 <b>${escapeTelegram(country)} • ${escapeTelegram(messageBody)}</b>`,
     "",
     `📅 ${escapeTelegram(dateTime.date)}`,
     `🕐 ${escapeTelegram(dateTime.time)}`,
