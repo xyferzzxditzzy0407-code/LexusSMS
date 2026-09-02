@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Xyferzz Admin Dashboard</title><link rel="stylesheet" href="css/style.css"></head>
+<body><div class="layout"><aside class="sidebar"><div class="brand">Lexus<span>SMS</span></div><nav>
+<a class="active" href="#overview">Overview</a><a href="#blocked">Blocked Words</a><a href="#files">Number Files</a><a href="#news">News</a><a href="#reports">Reports</a><a href="#moderation">Chat Moderation</a></nav><a class="admin-link" href="index.html">← User Dashboard</a></aside>
+<main class="main"><header><div><small>Administration</small><h1>Xyferzz Dashboard</h1></div><div class="avatar">X</div></header>
+<section id="overview" class="page active"><div class="hero"><span class="pill">● Admin Mode</span><h2>Control Center</h2><p>Manage moderation and site content from here.</p></div><div class="stats"><div><b id="wordCount">0</b><span>Blocked Words</span></div><div><b>7</b><span>Number Files</span></div><div><b>12</b><span>Bug Reports</span></div><div><b>ON</b><span>Auto Moderation</span></div></div></section>
+<section id="blocked" class="page"><div class="card"><div class="toolbar"><div><h2>Blocked Words</h2><p class="muted">Only admins can add or remove blocked words.</p></div></div><div class="add-row"><input id="wordInput" placeholder="Enter blocked word or phrase"><button onclick="addWord()">+ Add Block Word</button></div><div id="wordList"></div></div></section>
+<section id="files" class="page"><div class="card"><h2>Number Files</h2><div class="add-row"><input placeholder="File name"><input placeholder="Country"><button onclick="demo()">Publish File</button></div><p class="muted">File management backend can be connected later.</p></div></section>
+<section id="news" class="page"><div class="card"><h2>News Management</h2><textarea placeholder="Write news..."></textarea><button onclick="demo()">Publish News</button></div></section>
+<section id="reports" class="page"><div class="card"><h2>Bug Reports</h2><p>No live reports connected yet.</p></div></section>
+<section id="moderation" class="page"><div class="card"><h2>Chat Moderation</h2><div class="toggle on">● Auto Moderation ON</div><p class="muted">Blocked words configured above will be used by the backend moderation layer.</p></div></section>
+</main></div><script src="js/admin.js"></script></body></html>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LexusSMS</title><link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="brand">Lexus<span>SMS</span></div>
+  <nav>
+    <a class="active" href="#dashboard">Dashboard</a>
+    <a href="#otp">OTP</a><a href="#number-file">Number File</a><a href="#traffic">Traffic</a>
+    <a href="#sell-vermet">Sell Vermet</a><a href="#chat">Chat</a><a href="#report">Report</a><a href="#about">About</a>
+  </nav>
+  <a class="admin-link" href="Xyferzzdashboard.html">⚙ Admin Dashboard</a>
+</aside>
+<main class="main">
+<header><div><small>Welcome back</small><h1 id="pageTitle">Dashboard</h1></div><div class="avatar">X</div></header>
+
+<section id="dashboard" class="page active">
+<div class="hero"><div><span class="pill">● System Online</span><h2>LexusSMS Dashboard</h2><p>Modern SMS verification management panel.</p></div></div>
+<div class="stats"><div><b id="statTraffic">0</b><span>Traffic Today</span></div><div><b id="statOtp">0</b><span>Today's OTP</span></div><div><b>8</b><span>Countries</span></div><div><b>99.9%</b><span>System Uptime</span></div></div>
+<div class="grid2"><div class="card"><h3>Traffic by Country</h3><div id="countryTraffic"><p class="muted">Loading...</p></div></div><div class="card"><h3>Latest News</h3><div class="news"><b>Welcome to LexusSMS</b><p>Dashboard UI is ready for API integration.</p></div><div class="news"><b>System Update</b><p>Admin moderation tools are available.</p></div></div></div>
+</section>
+
+<section id="otp" class="page"><div class="card"><div class="toolbar"><input id="otpSearch" placeholder="Search nomor / negara..." oninput="filterOtp()"><button onclick="todayOtp()">Today's OTP</button></div><div class="tags"><button onclick="country('ALL')">ALL</button><button onclick="country('ID')">ID</button><button onclick="country('PK')">PK</button><button onclick="country('IN')">IN</button><button onclick="country('BD')">BD</button><button onclick="country('TH')">TH</button></div>
+<table><thead><tr><th>ID</th><th>Nomor</th><th>OTP</th><th>Jam</th></tr></thead><tbody id="otpBody"></tbody></table></div></section>
+
+<section id="number-file" class="page"><div class="card"><h2>Number File</h2><div class="stats mini"><div><b>7</b><span>Published Files</span></div><div><b>12,410</b><span>Total Numbers</span></div><div><b>320</b><span>Downloads Today</span></div></div><div class="file-list"><div class="file"><b>Pakistan_Jazz_September.txt</b><span>2,450 numbers</span><button onclick="demo()">Download</button></div><div class="file"><b>Indonesia_Telkomsel.txt</b><span>1,820 numbers</span><button onclick="demo()">Download</button></div><div class="file"><b>India_Airtel.txt</b><span>3,120 numbers</span><button onclick="demo()">Download</button></div></div></div></section>
+
+<section id="traffic" class="page"><div class="card"><h2>Traffic</h2><p class="muted">Authorized provider traffic will appear here.</p><div id="trafficData"></div></div></section>
+
+<section id="sell-vermet" class="page"><div class="card"><h2>Sell Vermet</h2><div class="seller"><div class="logo">V</div><div><b>Verified Seller</b><p>Vermet marketplace listing.</p></div><button onclick="demo()">View Seller</button></div></div></section>
+
+<section id="chat" class="page"><div class="card"><h2>Global Chat</h2><div id="messages" class="messages"><div><b>System</b><p>Welcome to Global Chat.</p></div></div><div class="chatbox"><input id="chatInput" placeholder="Write a message..."><button onclick="sendChat()">Send</button></div><p class="muted">Messages containing admin-configured blocked words are rejected.</p></div></section>
+
+<section id="report" class="page"><div class="card"><h2>Bug Report</h2><textarea placeholder="Describe the bug..."></textarea><button onclick="demo()">Submit Report</button></div></section>
+<section id="about" class="page"><div class="card"><h2>About LexusSMS</h2><p>LexusSMS is a modern SMS management interface.</p><p><b>Builder:</b> Xyferzz</p><p><b>Version:</b> 1.0 UI</p></div></section>
+</main></div>
+<script src="js/app.js"></script>
+</body></html>
