@@ -108,14 +108,14 @@ async function sendTelegram(row) {
     `🕐 ${escapeTelegram(dateTime.time)}`,
     "",
     `📱 Number: <code>${escapeTelegram(number)}</code>`,
-    `📋 Sender: <b>${escapeTelegram(messageBody)}</b>`
+    `📋 OTP: <b>${escapeTelegram(messageBody)}</b>`
   ].join("\n");
 
   const replyMarkup = {
     inline_keyboard: [
       [
         {
-          text: "📋 Copy Sender",
+          text: "OTP NICH",
           copy_text: {
             text: messageBody
           }
@@ -170,7 +170,7 @@ function getTrafficId(row) {
   return [
     row.receivedAt || "",
     row.destinationNumber || "",
-    row.sourceAddress || "",
+    row.messageBody || "",
     row.rangeName || ""
   ].join("-");
 }
